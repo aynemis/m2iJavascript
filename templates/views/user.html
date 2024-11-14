@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil Utilisateur</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../../scripts/user.js" defer></script>
+    <link rel="stylesheet" href="../../styles/styles.css">
+
+    <script type="module">
+        import { loadNavbar } from '../../scripts/common/navbar.js';
+        document.addEventListener( "DOMContentLoaded", loadNavbar );
+    </script>
+</head>
+
+<body>
+    <div id="navbar"></div>
+    <div class="container profile-container">
+        <h2 class="mb-4 text-center text-success">Votre Profil</h2>
+        <div id="successMessage" class="alert alert-success" role="alert">
+        </div>
+        <div id="errorMessage" class="alert alert-danger" role="alert">
+        </div>
+        <form id="profileForm">
+            <div class="form-group">
+                <label for="userName">Nom</label>
+                <input type="text" class="form-control" id="userName" placeholder="Entrez votre nom" required>
+            </div>
+            <div class="form-group">
+                <label for="userEmail">Email</label>
+                <input type="email" class="form-control" id="userEmail" placeholder="Entrez votre email" required>
+            </div>
+            <div class="form-group">
+                <label for="alertThreshold">Seuil d'Alerte (€)</label>
+                <input type="number" class="form-control" id="alertThreshold" placeholder="Entrez le seuil d'alerte"
+                    min="0.01" step="0.01" required>
+            </div>
+            <button id="save" type="submit" class="btn btn-success btn-block">Enregistrer les Modifications</button>
+        </form>
+
+        <button id="deleteAccountButton" class="btn delete-button btn-block mt-3">Supprimer le Compte</button>
+        <button class="btn btn-primary btn-block mt-3" onclick="window.location.href='../views/logs.html'">Voir mon historique de connexion</button>
+    </div>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

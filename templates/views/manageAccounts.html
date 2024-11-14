@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Comptes</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../../scripts/manageAccounts.js" defer></script>
+    <link rel="stylesheet" href="../../styles/styles.css">
+    <script type="module">
+        import { loadNavbar } from '../../scripts/common/navbar.js';
+        document.addEventListener( "DOMContentLoaded", loadNavbar );
+    </script>
+</head>
+
+<body>
+    <div id="navbar"></div>
+    <div class="container content-container">
+        <h2 class="mb-4 text-center text-success">Gestion de vos Comptes</h2>
+
+        <div id="successMessage" class="alert alert-success" role="alert">
+        </div>
+        <div id="errorMessage" class="alert alert-danger" role="alert">
+        </div>
+
+        <h4>Ajouter un Nouveau Compte</h4>
+        <form id="addAccountForm" class="mb-4">
+            <div class="form-group">
+                <label for="accountName">Nom du Compte</label>
+                <input type="text" class="form-control" id="accountName" placeholder="Entrez le nom du compte" required>
+            </div>
+            <div class="form-group">
+                <label for="accountType">Type de Compte</label>
+                <select class="form-control" id="accountType" required>
+                    <option value="">Sélectionnez un type</option>
+                    <option value="Épargne">Épargne</option>
+                    <option value="Courant">Courant</option>
+                    <option value="Investissement">Investissement</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-custom btn-block">Ajouter le Compte</button>
+        </form>
+
+        <h4>Vos Comptes</h4>
+        <table class="table table-bordered mt-2">
+            <thead>
+                <tr>
+                    <th>Nom du Compte</th>
+                    <th>Type de Compte</th>
+                    <th>Solde (€)</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="existingAccountsTableBody">
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
