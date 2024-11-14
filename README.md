@@ -20,6 +20,10 @@ Cette application bancaire est conçue pour offrir une gestion complète des com
 ### Historique des Connexions
 - Suivi des connexions pour une meilleure transparence.
 
+## Sécurité
+
+Nous avons protégé les routes par une redirection en cas de non-connexion de l'utilisateur. 
+
 ## Sécurité (à venir)
 
 Pour garantir la sécurité des données et protéger les utilisateurs contre les attaques potentielles, plusieurs mesures de sécurité seront progressivement mises en place, notamment :
@@ -29,7 +33,7 @@ Pour garantir la sécurité des données et protéger les utilisateurs contre le
   - au moins 1 chiffre,
   - 1 lettre majuscule,
   - et 1 caractère spécial.
-  - Chiffrer et hasher le mot de passe 
+  - chiffrer et hasher le mot de passe 
   
 - **Protection contre les Attaques Courantes** :
   - **Prévention des Attaques XSS** (Cross-Site Scripting),
