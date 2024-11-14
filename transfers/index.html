@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historique des Transactions</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="../styles.css">
+    <script type="module">
+        import { loadNavbar } from '../navbar.js';
+        document.addEventListener( "DOMContentLoaded", loadNavbar );
+    </script>
+</head>
+
+<body class="d-flex flex-column vh-100">
+    <div id="navbar" class="fixed-top"></div>
+
+    <div class="container mt-5 pt-4">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="table-container">
+                    <h2 id="welcomeMessage" class="text-center mb-3"></h2>
+                    <table class="table table-bordered table-sm">
+                        <thead>
+                            <tr>
+                                <th>Compte</th>
+                                <th>Solde</th>
+                            </tr>
+                        </thead>
+                        <tbody id="accountsTableBody"></tbody>
+                    </table>
+                    <h5 class="text-center" id="totalBalance">Solde Total: 0.00€</h5>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div class="table-container">
+                    <form id="filterForm" class="mb-2">
+                        <div class="form-row align-items-center">
+                            <div class="col-md-6 mb-2">
+                                <label for="filterType" class="small">Type de Transaction</label>
+                                <select id="filterType" class="form-control form-control-sm">
+                                    <option value="">Sélectionner</option>
+                                    <option value="envoye">Envoyé</option>
+                                    <option value="recu">Reçu</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <label for="filterDateRange" class="small">Plage de Dates</label>
+                                <select id="filterDateRange" class="form-control form-control-sm">
+                                    <option value="">Sélectionner</option>
+                                    <option value="7">Derniers 7 jours</option>
+                                    <option value="30">Derniers 30 jours</option>
+                                    <option value="90">Derniers 90 jours</option>
+                                    <option value="all">Tous les transferts</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <label for="filterDate" class="small">Date Spécifique</label>
+                                <input type="date" id="filterDate" class="form-control form-control-sm">
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <label for="filterAccount" class="small">Compte</label>
+                                <select id="filterAccount" class="form-control form-control-sm">
+                                    <option value="">Sélectionner</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="button" id="filterButton"
+                            class="btn btn-success btn-sm btn-block mt-2">Filtrer</button>
+                        <button type="button" id="afficherTout" class="btn btn-info btn-sm btn-block mt-2 mb-4">Afficher
+                            Tout</button>
+                    </form>
+
+                    <div class="table-responsive" style="height: 300px;">
+                        <table class="table table-striped table-sm" style=" overflow-y: auto; margin-top: 0;">
+                            <thead class="fixed-top" style="position: sticky;">
+                                <tr>
+                                    <th class="text-truncate small">Date</th>
+                                    <th class="text-truncate small">Description</th>
+                                    <th class="text-truncate small">Montant</th>
+                                    <th class="text-truncate small">Type</th>
+                                    <th class="text-truncate small">Expéditeur</th>
+                                    <th class="text-truncate small">Destinataire</th>
+                                </tr>
+                            </thead>
+                            <tbody class="sticky-top" id="transactionTableBody"></tbody>
+                        </table>
+                    </div>
+
+                    <div id=" noTransactionMessage" class="alert alert-info text-center mt-2 d-none">
+                        Aucune transaction trouvée selon les filtres appliqués.
+                    </div>
+
+                    <div class="text-center mt-2">
+                        <button type="button" id="downloadCSV" class="btn btn-secondary btn-sm">Télécharger en
+                            CSV</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
