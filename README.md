@@ -29,6 +29,7 @@ Pour garantir la sécurité des données et protéger les utilisateurs contre le
   - au moins 1 chiffre,
   - 1 lettre majuscule,
   - et 1 caractère spécial.
+  - Chiffrer et hasher le mot de passe 
   
 - **Protection contre les Attaques Courantes** :
   - **Prévention des Attaques XSS** (Cross-Site Scripting),
