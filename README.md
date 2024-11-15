@@ -22,19 +22,17 @@ Cette application bancaire est conçue pour offrir une gestion complète des com
 
 ## Sécurité
 
-Nous avons protégé les routes par une redirection en cas de non-connexion de l'utilisateur. 
-
-## Sécurité (à venir)
-
-Pour garantir la sécurité des données et protéger les utilisateurs contre les attaques potentielles, plusieurs mesures de sécurité seront progressivement mises en place, notamment :
-
 - **Politique de Mot de Passe** : Conformément aux recommandations de la CNIL, un mot de passe devra contenir au minimum :
   - 12 caractères,
   - au moins 1 chiffre,
   - 1 lettre majuscule,
   - et 1 caractère spécial.
   - chiffrer et hasher le mot de passe 
-  
+
+## Sécurité (à venir)
+
+Pour garantir la sécurité des données et protéger les utilisateurs contre les attaques potentielles, plusieurs mesures de sécurité seront progressivement mises en place, notamment :
+
 - **Protection contre les Attaques Courantes** :
   - **Prévention des Attaques XSS** (Cross-Site Scripting),
   - **Prévention des Attaques CSRF** (Cross-Site Request Forgery),
