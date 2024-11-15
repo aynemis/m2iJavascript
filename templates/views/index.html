@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instabank - Gérez vos finances facilement</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../styles/styles.css">
+    <script type="module">
+        import { loadNavbar } from '../../scripts/common/navbar.js';
+        document.addEventListener("DOMContentLoaded", loadNavbar);
+    </script>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <div id="navbar"></div>
+
+    <!-- Main Content -->
+    <div class="content-container mt-5">
+        <!-- Welcome Section -->
+        <div class="text-center">
+            <h1 class="display-4 text-success">Bienvenue chez Instabank</h1>
+            <p class="lead mt-3">
+                Simplifiez la gestion de vos finances grâce à notre plateforme.
+            </p>
+            <img src="../../styles/images/happy.jpg" alt="Illustration bancaire" class="img-fluid my-4 mx-auto d-block">
+        </div>
+
+        <!-- Features Section -->
+        <div class="d-flex flex-wrap justify-content-center mt-5">
+            <div class="col-md-4 d-flex align-items-stretch">
+                <div class="card border-success shadow-sm w-100 mb-4">
+                    <div class="card-body text-center">
+                        <h5 class="card-title text-success">Gérez vos comptes</h5>
+                        <p class="card-text">
+                            Consultez votre solde, vos transactions et vos relevés bancaires en temps réel.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 d-flex align-items-stretch">
+                <div class="card border-success shadow-sm w-100 mb-4">
+                    <div class="card-body text-center">
+                        <h5 class="card-title text-success">Effectuez des transferts</h5>
+                        <p class="card-text">
+                            Transférez de l'argent rapidement et sans tracas.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Call-to-Action Section -->
+        <div class="text-center mt-5">
+            <p class="lead">Commencez dès maintenant à gérer vos finances en toute simplicité.</p>
+            <a href="../views/signin.html" class="btn btn-success btn-lg">Se connecter</a>
+            <a href="../views/signup.html" class="btn btn-outline-success btn-lg ml-3">Créer un compte</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-5 py-4 bg-light text-center">
+        <p class="mb-0 text-secondary">&copy; 2024 Instabank</p>
+    </footer>
+
+    <!-- Bootstrap Bundle -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

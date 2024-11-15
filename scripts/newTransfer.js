@@ -19,7 +19,7 @@ function loadSenderAccounts() {
     }
 
     $.ajax({
-        url: `http://localhost:3000/accounts?userId=${userId}`,
+        url: `http://localhost:8000/accounts?userId=${userId}`,
         type: 'GET',
         success: populateAccountOptions,
         error: function (error) {
@@ -82,15 +82,16 @@ function performInternalTransfer() {
             return;
         }
         fetchRecipientAccounts(userId, function (recipientAccounts) {
-            const recipientAccount = recipientAccounts.find(account => account.type === 'Courant');
+            const recipientAccount = recipientAccounts.find(account => account.id === recipientAccountId); 
             if (!recipientAccount) {
-                showErrorMessage("Le destinataire n'a pas de compte courant.");
+                showErrorMessage("Le destinataire n'a pas de compte.");
                 return;
             }
             processInternalTransfer(senderAccount, recipientAccount, amount, transferType);
         });
     });
 }
+
 
 function performExternalTransfer() {
     const recipientEmail = $('#recipientEmail').val().trim();
@@ -102,13 +103,9 @@ function performExternalTransfer() {
     if (!validateFormInputs(transferType, recipientEmail, senderAccountId, amount)) return;
 
     $.ajax({
-        url: `http://localhost:3000/users?email=${encodeURIComponent(recipientEmail)}`,
+        url: `http://localhost:8000/users?email=${(recipientEmail)}`,
         type: 'GET',
         success: function (users) {
-            if (users.length === 0) {
-                showErrorMessage("L'adresse email du destinataire est invalide ou n'existe pas.");
-                return;
-            }
             const recipientId = users[0].id;
             fetchRecipientAccounts(recipientId, function (recipientAccounts) {
                 const recipientAccount = recipientAccounts.find(account => account.type === 'Courant');
@@ -125,8 +122,13 @@ function performExternalTransfer() {
                 });
             });
         },
-        error: function () {
-            showErrorMessage("Erreur lors de la récupération de l'utilisateur.");
+        error: function (xhr, status, error) {
+            console.error("AJAX Error:", error);
+            if (xhr.status === 404) {
+                showErrorMessage("L'adresse email du destinataire est invalide ou n'existe pas.");
+            } else {
+                showErrorMessage("Erreur lors de la récupération de l'utilisateur.");
+            }
         }
     });
 }
@@ -146,8 +148,8 @@ function processExternalTransfer(senderAccount, recipientAccount, amount, transf
     const updatedSenderBalance = senderAccount.balance - amount;
     const updatedRecipientBalance = recipientAccount.balance + amount;
 
-    updateAccountBalance(senderAccount.id, { ...senderAccount, balance: updatedSenderBalance }, function () {
-        updateAccountBalance(recipientAccount.id, { ...recipientAccount, balance: updatedRecipientBalance }, function () {
+    updateAccountBalance(senderAccount.id, { balance: updatedSenderBalance }, function () {
+        updateAccountBalance(recipientAccount.id, { balance: updatedRecipientBalance }, function () {
             createTransactionRecord(senderAccount, recipientAccount, amount, userId, recipientAccount.userId, senderAccount.name, recipientAccount.name, transferType);
         });
     });
@@ -155,8 +157,8 @@ function processExternalTransfer(senderAccount, recipientAccount, amount, transf
 
 function updateAccountBalance(accountId, updatedAccount, onSuccess) {
     $.ajax({
-        url: `http://localhost:3000/accounts/${accountId}`,
-        type: 'PUT',
+        url: `http://localhost:8000/accounts/${accountId}`,
+        type: 'PATCH',
         contentType: 'application/json',
         data: JSON.stringify(updatedAccount),
         success: onSuccess,
@@ -169,7 +171,7 @@ function updateAccountBalance(accountId, updatedAccount, onSuccess) {
 
 function fetchAccount(accountId, callback) {
     $.ajax({
-        url: `http://localhost:3000/accounts/${accountId}`,
+        url: `http://localhost:8000/accounts/${accountId}`,
         type: 'GET',
         success: function (account) {
             callback(account);
@@ -183,7 +185,7 @@ function fetchAccount(accountId, callback) {
 
 function fetchRecipientAccounts(recipientId, callback) {
     $.ajax({
-        url: `http://localhost:3000/accounts?userId=${recipientId}`,
+        url: `http://localhost:8000/accounts?userId=${recipientId}`,
         type: 'GET',
         success: function (accounts) {
             if (accounts.length === 0) {
@@ -216,7 +218,7 @@ function createTransactionRecord(senderAccount, recipientAccount, amount, sender
     };
 
     $.ajax({
-        url: 'http://localhost:3000/transactions',
+        url: 'http://localhost:8000/transactions',
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(transaction),

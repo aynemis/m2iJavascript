@@ -25,7 +25,7 @@ function loadUserInfo() {
     const username = localStorage.getItem('username');
 
     $.ajax({
-        url: 'http://localhost:3000/users',
+        url: 'http://localhost:8000/users',
         type: 'GET',
         success: function (users) {
             const user = users.find(u => u.name === username);
@@ -51,47 +51,48 @@ function populateProfileForm(user) {
 
 
 function updateUserProfile() {
-    const username = localStorage.getItem('username');
+    const userId = localStorage.getItem('userId');  
+    const updatedName = $('#userName').val().trim(); 
+    const updatedEmail = $('#userEmail').val().trim(); 
+    const alertThresholdStr = $('#alertThreshold').val().trim(); // Get alert threshold as string
 
-    const updatedName = $('#userName').val().trim();
-    const updatedEmail = $('#userEmail').val().trim();
-    const alertThreshold = parseFloat($('#alertThreshold').val());
+    // Convert alert threshold to null if it's empty, otherwise parse it as a number
+    const alertThreshold = alertThresholdStr === "" ? null : parseFloat(alertThresholdStr);
 
-    if (updatedName === "" || updatedEmail === "" || isNaN(alertThreshold) || alertThreshold <= 0) {
+    if (updatedName === "" || updatedEmail === "" || 
+        (alertThresholdStr !== "" && (isNaN(alertThreshold) || alertThreshold < 0))) {
         showErrorMessage("Veuillez remplir tous les champs avec des valeurs valides.");
         return;
     }
 
     $.ajax({
-        url: `http://localhost:3000/users?name=${encodeURIComponent(username)}`,
+        url: `http://localhost:8000/users/${userId}`, 
         type: 'GET',
-        success: function (users) {
-            if (users.length === 0) {
+        success: function (user) {
+            if (!user) {
                 console.error("Utilisateur non trouvé.");
                 showErrorMessage("Utilisateur non trouvé.");
                 return;
             }
 
-            const user = users[0]; 
-
             const updatedUser = {
                 ...user,
                 name: updatedName,
                 email: updatedEmail,
-                alertThreshold: alertThreshold
+                alertThreshold: alertThreshold 
             };
 
+            
             $.ajax({
-                url: `http://localhost:3000/users/${user.id}`,
-                type: 'PUT', 
+                url: `http://localhost:8000/users/${user.id}`,  
+                type: 'PUT',
                 contentType: 'application/json',
                 data: JSON.stringify(updatedUser),
                 success: function () {
-                    if (username !== updatedName) {
-                        localStorage.setItem('username', updatedName);
+                    if (user.name !== updatedName) {
+                        localStorage.setItem('username', updatedName); 
                     }
-
-                    showSuccessMessage("Informations mises à jour avec succès !");
+                    showSuccessMessage("Informations mises à jour avec succès !");
                 },
                 error: function (error) {
                     console.error("Erreur lors de la mise à jour de l'utilisateur :", error);
@@ -108,7 +109,7 @@ function updateUserProfile() {
 
 
 function deleteUserAccount() {
-    const username = localStorage.getItem('username');
+    const userId = localStorage.getItem('userId');  
 
     const confirmation = confirm("Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.");
 
@@ -116,40 +117,23 @@ function deleteUserAccount() {
         return; 
     }
 
-
     $.ajax({
-        url: `http://localhost:3000/users?name=${encodeURIComponent(username)}`,
-        type: 'GET',
-        success: function (users) {
-            if (users.length === 0) {
-                console.error("Utilisateur non trouvé.");
-                showErrorMessage("Utilisateur non trouvé.");
-                return;
-            }
-
-            const user = users[0]; 
-
-            $.ajax({
-                url: `http://localhost:3000/users/${user.id}`,
-                type: 'DELETE',
-                success: function () {
-                    showSuccessMessage("Votre compte a été supprimé avec succès.");
-                    localStorage.removeItem('isLoggedIn');
-                    localStorage.removeItem('username');
-                    window.location.href = '../views/signin.html';
-                },
-                error: function (error) {
-                    console.error("Erreur lors de la suppression de l'utilisateur :", error);
-                    showErrorMessage("Erreur lors de la suppression de votre compte. Veuillez réessayer.");
-                }
-            });
+        url: `http://localhost:8000/users/${encodeURIComponent(userId)}`,  
+        type: 'DELETE',
+        success: function () {
+            showSuccessMessage("Votre compte a été supprimé avec succès.");
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('username');
+            localStorage.removeItem('userId'); 
+            window.location.href = '../views/signin.html'; 
         },
         error: function (error) {
-            console.error("Erreur lors de la récupération de l'utilisateur :", error);
-            showErrorMessage("Erreur lors de la récupération de l'utilisateur. Veuillez réessayer.");
+            console.error("Erreur lors de la suppression de l'utilisateur :", error);
+            showErrorMessage("Erreur lors de la suppression de votre compte. Veuillez réessayer.");
         }
     });
 }
+
 
 
 function showErrorMessage(message) {

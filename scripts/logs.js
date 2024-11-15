@@ -11,7 +11,7 @@ function loadLoginHistory() {
     const userId = localStorage.getItem('userId');
 
     $.ajax({
-        url: `http://localhost:3000/loginHistory?userId=${userId}`,
+        url: `http://localhost:8000/loginHistory?userId=${userId}`,
         type: 'GET',
         success: function (logins) {
             displayLoginHistory(logins);

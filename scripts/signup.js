@@ -26,7 +26,7 @@ $(document).ready(function () {
         };
 
         $.ajax({
-            url: 'http://localhost:3000/users',
+            url: 'http://localhost:8000/users',
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(userData),
@@ -35,9 +35,23 @@ $(document).ready(function () {
                 $('#registrationForm')[0].reset();
                 window.location.href = '../views/signin.html';
             },
-            error: function (error) {
-                console.error("Erreur lors de la création du compte :", error);
-                alert("Erreur lors de la création du compte. Veuillez réessayer.");
+            error: function (xhr, status, error) {
+                console.error("Error during account creation:", error);
+
+                // Parse and display the error message from the response
+                const errorMessage = xhr.responseJSON ? xhr.responseJSON.detail : "An unknown error occurred.";
+                alert("Error: " + errorMessage);
+
+                // Highlight the invalid field
+                if (xhr.responseJSON && xhr.responseJSON.detail) {
+                    const errorDetail = xhr.responseJSON.detail;
+                    if (errorDetail.includes("Cet email est déjà utilisé")) {
+                        $('#email').addClass('is-invalid');
+                    }
+                    if (errorDetail.includes("Mot de passe")) {
+                        $('#password').addClass('is-invalid');
+                    }
+                }
             }
         });
     });

@@ -35,7 +35,7 @@ function loadUserInfo() {
 
 function fetchAccountsForUser(userId) {
     $.ajax({
-        url: `http://localhost:3000/accounts?userId=${userId}`,
+        url: `http://localhost:8000/accounts?userId=${userId}`,
         type: 'GET',
         success: function (accounts) {
             displayAccounts(accounts);
@@ -83,7 +83,7 @@ function populateAccountFilter(accounts) {
 
 function fetchTransactionsForUser(userId) {
     $.ajax({
-        url: `http://localhost:3000/transactions`,
+        url: `http://localhost:8000/transactions`,
         type: 'GET',
         success: function (transactions) {
             const userTransactions = transactions.filter(transaction =>
@@ -144,7 +144,7 @@ function getAccountName(accountId) {
 function getUserAccounts() {
     let accounts = [];
     $.ajax({
-        url: `http://localhost:3000/accounts?userId=${userId}`,
+        url: `http://localhost:8000/accounts?userId=${userId}`,
         type: 'GET',
         async: false,
         success: function (data) {
@@ -165,7 +165,7 @@ function applyFilters() {
     const filterAccount = $('#filterAccount').val();
 
     $.ajax({
-        url: 'http://localhost:3000/transactions',
+        url: 'http://localhost:8000/transactions',
         type: 'GET',
         success: function (transactions) {
             let filteredTransactions = transactions.filter(transaction =>
@@ -228,7 +228,7 @@ function applyFilters() {
 
 function showAllTransactions() {
     $.ajax({
-        url: 'http://localhost:3000/transactions',
+        url: 'http://localhost:8000/transactions',
         type: 'GET',
         success: function (transactions) {
             const userTransactions = transactions.filter(transaction =>

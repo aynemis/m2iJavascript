@@ -11,14 +11,14 @@ const userId = localStorage.getItem('userId');
 
 function loadUserInfo() {
     $.ajax({
-        url: `http://localhost:3000/users?id=${encodeURIComponent(userId)}`,
+        url: `http://localhost:8000/users/${(userId)}`,
         type: 'GET',
-        success: function (users) {
-            if (users.length === 0) {
+        success: function (user) {
+            if (!user) {
                 window.location.href = '../templates/views/signin.html';
                 return;
             }
-            const user = users[0];
+            console.log(user)
             $('#welcomeMessage').text(`Bienvenue ${user.name}`);
             fetchAccountsForUser(user.id, user.alertThreshold);
         },
@@ -32,7 +32,7 @@ function loadUserInfo() {
 
 function fetchAccountsForUser(userId, alertThreshold) {
     $.ajax({
-        url: `http://localhost:3000/accounts?userId=${userId}`,
+        url: `http://localhost:8000/accounts?userId=${userId}`,
         type: 'GET',
         success: function (accounts) {
             const courantAccounts = accounts.filter(account => account.type === 'Courant');
@@ -79,7 +79,7 @@ function displayAccounts(accounts, alertThreshold) {
 
 function fetchUserTransactions(userId, courantAccounts) {
     $.ajax({
-        url: `http://localhost:3000/transactions`,
+        url: `http://localhost:8000/transactions`,
         type: 'GET',
         success: function (transactions) {
             const accountIds = courantAccounts.map(account => account.id);

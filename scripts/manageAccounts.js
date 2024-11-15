@@ -16,7 +16,7 @@ const userId = localStorage.getItem('userId');
 
 function loadExistingAccounts() {
     $.ajax({
-        url: `http://localhost:3000/accounts?userId=${userId}`,
+        url: `http://localhost:8000/accounts?userId=${userId}`,
         type: 'GET',
         success: function (accounts) {
             displayExistingAccounts(accounts);
@@ -79,7 +79,7 @@ function addNewAccount() {
     };
 
     $.ajax({
-        url: 'http://localhost:3000/accounts',
+        url: 'http://localhost:8000/accounts',
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(newAccount),
@@ -100,7 +100,7 @@ function deleteAccount(accountId) {
     if (!confirmation) return;
 
     $.ajax({
-        url: `http://localhost:3000/accounts/${accountId}`,
+        url: `http://localhost:8000/accounts/${accountId}`,
         type: 'DELETE',
         success: function () {
             showSuccessMessage("Compte supprimé avec succès !");
@@ -135,16 +135,16 @@ function depositToAccount(accountId) {
     }
 
     $.ajax({
-        url: `http://localhost:3000/accounts/${accountId}`,
+        url: `http://localhost:8000/accounts/${accountId}`,
         type: 'GET',
         success: function (account) {
             const newBalance = account.balance + parseFloat(depositAmount);
 
             $.ajax({
-                url: `http://localhost:3000/accounts/${accountId}`,
+                url: `http://localhost:8000/accounts/${accountId}`,  // Pass balance as query parameter
                 type: 'PATCH',
-                contentType: 'application/json',
-                data: JSON.stringify({ balance: newBalance }),
+                contentType: 'application/json',  
+                data: JSON.stringify({balance: newBalance}),
                 success: function () {
                     const transaction = {
                         id: generateTransactionId(),
@@ -159,10 +159,10 @@ function depositToAccount(accountId) {
                         senderBalanceAfter: newBalance,
                         recipientBalanceAfter: newBalance
                     };
-
+            
                     recordTransaction(transaction, function () {
                         showSuccessMessage("Dépôt effectué avec succès !");
-                        loadExistingAccounts();
+                        loadExistingAccounts();  // Reload accounts or refresh UI as necessary
                     });
                 },
                 error: function (error) {
@@ -170,6 +170,7 @@ function depositToAccount(accountId) {
                     showErrorMessage("Erreur lors du dépôt. Veuillez réessayer.");
                 }
             });
+            
         },
         error: function (error) {
             console.error("Erreur lors de la récupération du solde actuel :", error);
@@ -186,7 +187,7 @@ function withdrawFromAccount(accountId) {
     }
 
     $.ajax({
-        url: `http://localhost:3000/accounts/${accountId}`,
+        url: `http://localhost:8000/accounts/${accountId}`,
         type: 'GET',
         success: function (account) {
             const currentBalance = account.balance;
@@ -200,7 +201,7 @@ function withdrawFromAccount(accountId) {
             const newBalance = currentBalance - amountToWithdraw;
 
             $.ajax({
-                url: `http://localhost:3000/accounts/${accountId}`,
+                url: `http://localhost:8000/accounts/${accountId}`,
                 type: 'PATCH',
                 contentType: 'application/json',
                 data: JSON.stringify({ balance: newBalance }),
@@ -239,7 +240,7 @@ function withdrawFromAccount(accountId) {
 
 function recordTransaction(transaction, callback) {
     $.ajax({
-        url: 'http://localhost:3000/transactions',
+        url: 'http://localhost:8000/transactions',
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(transaction),
