@@ -38,3 +38,16 @@ Pour garantir la sécurité des données et protéger les utilisateurs contre le
   - **Prévention des Attaques CSRF** (Cross-Site Request Forgery),
   - **Protection contre les Injections SQL** : Toutes les entrées utilisateur sont traitées pour prévenir les tentatives d’injection SQL.
   - **Sécurité contre les Attaques par Force Brute** : Mise en place de limitations de tentatives de connexion pour éviter les attaques par force brute.
+
+## Technologies utilisées
+
+### Frontend
+- **HTML**
+- **CSS**
+  - **Bootstrap 4**
+  - **Custom CSS**
+- **JavaScript**
+  - **jQuery**
+
+### Backend 
+- **FastAPI (Python)**
