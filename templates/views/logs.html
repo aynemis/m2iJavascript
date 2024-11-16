@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,15 +8,17 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="../../styles/styles.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.0/purify.min.js"></script>
     <script src="../../scripts/logs.js" defer></script>
     <script type="module">
         import { loadNavbar } from '../../scripts/common/navbar.js';
-        document.addEventListener("DOMContentLoaded", loadNavbar);
+        document.addEventListener( "DOMContentLoaded", loadNavbar );
     </script>
 </head>
+
 <body>
     <div id="navbar"></div>
-    
+
     <div class="container content-container">
         <h2 class="mb-4 text-center text-success">Historique de Connexion</h2>
         <div id="successMessage" class="alert alert-success" role="alert"></div>
@@ -38,4 +41,5 @@
 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

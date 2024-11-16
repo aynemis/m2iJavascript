@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profil Utilisateur</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.0/purify.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="../../scripts/user.js" defer></script>
     <link rel="stylesheet" href="../../styles/styles.css">
@@ -36,13 +37,14 @@
             <div class="form-group">
                 <label for="alertThreshold">Seuil d'Alerte (€)</label>
                 <input type="number" class="form-control" id="alertThreshold" placeholder="Entrez le seuil d'alerte"
-                    min="0.01" step="0.01" >
+                    min="0.01" step="0.01">
             </div>
             <button id="save" type="submit" class="btn btn-success btn-block">Enregistrer les Modifications</button>
         </form>
 
         <button id="deleteAccountButton" class="btn delete-button btn-block mt-3">Supprimer le Compte</button>
-        <button class="btn btn-primary btn-block mt-3" onclick="window.location.href='../views/logs.html'">Voir mon historique de connexion</button>
+        <button class="btn btn-primary btn-block mt-3" onclick="window.location.href='../views/logs.html'">Voir mon
+            historique de connexion</button>
     </div>
 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>

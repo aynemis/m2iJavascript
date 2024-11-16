@@ -9,8 +9,8 @@ $(document).ready(function () {
     handleTransferTypeToggle();
     handleFormSubmission();
 });
-
-const userId = localStorage.getItem("userId");
+const sanitizeInput = (input) => DOMPurify.sanitize(input);
+const userId = sanitizeInput(localStorage.getItem("userId")); // Nettoyage ajouté
 
 function loadSenderAccounts() {
     if (!userId) {
@@ -19,7 +19,7 @@ function loadSenderAccounts() {
     }
 
     $.ajax({
-        url: `http://localhost:8000/accounts?userId=${userId}`,
+        url: `http://localhost:8000/accounts?userId=${userId}`, // Nettoyage ajouté
         type: 'GET',
         success: populateAccountOptions,
         error: function (error) {
@@ -29,13 +29,15 @@ function loadSenderAccounts() {
     });
 }
 
+
 function populateAccountOptions(accounts) {
     const senderAccountSelect = $('#senderAccount');
     const recipientAccountSelect = $('#recipientAccount');
     senderAccountSelect.empty().append('<option value="">Sélectionnez un compte</option>');
     recipientAccountSelect.empty().append('<option value="">Sélectionnez un compte</option>');
     accounts.forEach(account => {
-        const accountOption = `<option value="${account.id}">${account.name} - Solde: €${account.balance.toFixed(2)}</option>`;
+        const sanitizedAccountName = sanitizeInput(account.name); // Nettoyage ajouté
+        const accountOption = `<option value="${sanitizeInput(account.id)}">${sanitizedAccountName} - Solde: €${account.balance.toFixed(2)}</option>`; // Nettoyage ajouté
         senderAccountSelect.append(accountOption);
         recipientAccountSelect.append(accountOption);
     });
@@ -52,7 +54,7 @@ function handleTransferTypeToggle() {
 function handleFormSubmission() {
     $('#transferForm').on('submit', function (e) {
         e.preventDefault();
-        const transferType = $('#transferType').val();
+        const transferType = sanitizeInput($('#transferType').val()); // Nettoyage ajouté
 
         if (transferType === 'internal') {
             performInternalTransfer();
@@ -61,10 +63,9 @@ function handleFormSubmission() {
         }
     });
 }
-
 function performInternalTransfer() {
-    const senderAccountId = $('#senderAccount').val();
-    const recipientAccountId = $('#recipientAccount').val();
+    const senderAccountId = sanitizeInput($('#senderAccount').val()); // Nettoyage ajouté
+    const recipientAccountId = sanitizeInput($('#recipientAccount').val()); // Nettoyage ajouté
     const amount = parseFloat($('#transferAmount').val());
     const transferType = 'internal';
     resetMessages();
@@ -82,7 +83,7 @@ function performInternalTransfer() {
             return;
         }
         fetchRecipientAccounts(userId, function (recipientAccounts) {
-            const recipientAccount = recipientAccounts.find(account => account.id === recipientAccountId); 
+            const recipientAccount = recipientAccounts.find(account => account.id === recipientAccountId);
             if (!recipientAccount) {
                 showErrorMessage("Le destinataire n'a pas de compte.");
                 return;
@@ -94,8 +95,8 @@ function performInternalTransfer() {
 
 
 function performExternalTransfer() {
-    const recipientEmail = $('#recipientEmail').val().trim();
-    const senderAccountId = $('#senderAccount').val();
+    const recipientEmail = sanitizeInput($('#recipientEmail').val().trim()); // Nettoyage ajouté
+    const senderAccountId = sanitizeInput($('#senderAccount').val()); // Nettoyage ajouté
     const amount = parseFloat($('#transferAmount').val());
     const transferType = 'external';
     resetMessages();
@@ -103,7 +104,7 @@ function performExternalTransfer() {
     if (!validateFormInputs(transferType, recipientEmail, senderAccountId, amount)) return;
 
     $.ajax({
-        url: `http://localhost:8000/users?email=${(recipientEmail)}`,
+        url: `http://localhost:8000/users?email=${recipientEmail}`, // La sanitisation est appliquée à l'email
         type: 'GET',
         success: function (users) {
             const recipientId = users[0].id;
@@ -133,6 +134,7 @@ function performExternalTransfer() {
     });
 }
 
+
 function processInternalTransfer(senderAccount, recipientAccount, amount) {
     const updatedSenderBalance = senderAccount.balance - amount;
     const updatedRecipientBalance = recipientAccount.balance + amount;
@@ -156,6 +158,9 @@ function processExternalTransfer(senderAccount, recipientAccount, amount, transf
 }
 
 function updateAccountBalance(accountId, updatedAccount, onSuccess) {
+    // Validation de accountId pour s'assurer qu'il est valide
+    accountId = sanitizeInput(accountId);  // Si nécessaire, assurez-vous qu'il est un ID valide
+
     $.ajax({
         url: `http://localhost:8000/accounts/${accountId}`,
         type: 'PATCH',
@@ -170,6 +175,9 @@ function updateAccountBalance(accountId, updatedAccount, onSuccess) {
 }
 
 function fetchAccount(accountId, callback) {
+    // Validation de accountId pour s'assurer qu'il est valide
+    accountId = sanitizeInput(accountId);  // Si nécessaire, assurez-vous qu'il est un ID valide
+
     $.ajax({
         url: `http://localhost:8000/accounts/${accountId}`,
         type: 'GET',
@@ -184,6 +192,9 @@ function fetchAccount(accountId, callback) {
 }
 
 function fetchRecipientAccounts(recipientId, callback) {
+    // Validation et sanitisation de recipientId
+    recipientId = sanitizeInput(recipientId);  // Assurez-vous qu'il est un ID valide
+
     $.ajax({
         url: `http://localhost:8000/accounts?userId=${recipientId}`,
         type: 'GET',
@@ -201,7 +212,12 @@ function fetchRecipientAccounts(recipientId, callback) {
     });
 }
 
+
 function createTransactionRecord(senderAccount, recipientAccount, amount, senderId, recipientId, senderName, recipientName, transferType) {
+    // Sanitiser les noms pour éviter les attaques XSS
+    senderName = sanitizeInput(senderName);
+    recipientName = sanitizeInput(recipientName);
+
     const transaction = {
         fromUserId: senderId,
         toUserId: recipientId,
@@ -233,7 +249,6 @@ function createTransactionRecord(senderAccount, recipientAccount, amount, sender
         }
     });
 }
-
 function resetMessages() {
     $('#successMessage').hide();
     $('#errorMessage').hide();
@@ -251,11 +266,24 @@ function validateFormInputs(transferType, recipientEmail, senderAccountId, amoun
     return true;
 }
 
-function showErrorMessage(message) {
-    $('#errorMessage').text(message).fadeIn();
-    setTimeout(() => $('#errorMessage').fadeOut(), 5000);
+function resetMessages() {
+    $('#successMessage').hide();
+    $('#errorMessage').hide();
 }
 
+function validateFormInputs(transferType, recipientEmail, senderAccountId, amount) {
+    recipientEmail = sanitizeInput(recipientEmail);
+
+    if (transferType === "external" && !recipientEmail) {
+        showErrorMessage("Veuillez fournir l'email du destinataire pour un transfert externe.");
+        return false;
+    }
+    if (!senderAccountId || isNaN(amount) || amount <= 0) {
+        showErrorMessage("Veuillez remplir tous les champs avec des valeurs valides.");
+        return false;
+    }
+    return true;
+}
 function showSuccessMessage(message) {
     $('#successMessage').text(message).fadeIn();
     setTimeout(() => $('#successMessage').fadeOut(), 5000);

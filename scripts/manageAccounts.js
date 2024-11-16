@@ -10,16 +10,21 @@ $(document).ready(function () {
         e.preventDefault();
         addNewAccount();
     });
-});
-
-const userId = localStorage.getItem('userId');
+} );
+const sanitizeInput = (input) =>  DOMPurify.sanitize(input);// Échappe les caractères spéciaux
+const userId = sanitizeInput(localStorage.getItem('userId')); // Nettoyage ajouté
 
 function loadExistingAccounts() {
     $.ajax({
-        url: `http://localhost:8000/accounts?userId=${userId}`,
+        url: `http://localhost:8000/accounts?userId=${sanitizeInput(userId)}`, // Nettoyage ajouté
         type: 'GET',
         success: function (accounts) {
-            displayExistingAccounts(accounts);
+            const sanitizedAccounts = accounts.map(account => ({
+                ...account,
+                name: sanitizeInput(account.name), // Nettoyage ajouté
+                type: sanitizeInput(account.type) // Nettoyage ajouté
+            }));
+            displayExistingAccounts(sanitizedAccounts);
         },
         error: function (error) {
             console.error("Erreur lors du chargement des comptes :", error);
@@ -37,14 +42,14 @@ function displayExistingAccounts(accounts) {
     } else {
         accounts.forEach(account => {
             const row = `<tr>
-                <td>${account.name}</td>
-                <td>${account.type}</td>
+                <td>${sanitizeInput(account.name)}</td>  <!-- Nettoyage ajouté -->
+                <td>${sanitizeInput(account.type)}</td>  <!-- Nettoyage ajouté -->
                 <td>${account.balance.toFixed(2)} €</td>
                 <td>
                     <div class="btn-group" role="group">
-                        <button class="btn btn-success btn-sm" onclick="depositToAccount('${account.id}')">Dépôt</button>
-                        <button class="btn btn-warning btn-sm ml-2" onclick="withdrawFromAccount('${account.id}')">Retrait</button>
-                        <button class="btn btn-danger btn-sm ml-2" onclick="deleteAccount('${account.id}')">Supprimer</button>
+                        <button class="btn btn-success btn-sm" onclick="depositToAccount('${sanitizeInput(account.id)}')">Dépôt</button> <!-- Nettoyage ajouté -->
+                        <button class="btn btn-warning btn-sm ml-2" onclick="withdrawFromAccount('${sanitizeInput(account.id)}')">Retrait</button> <!-- Nettoyage ajouté -->
+                        <button class="btn btn-danger btn-sm ml-2" onclick="deleteAccount('${sanitizeInput(account.id)}')">Supprimer</button> <!-- Nettoyage ajouté -->
                     </div>
                 </td>
             </tr>`;
@@ -53,9 +58,10 @@ function displayExistingAccounts(accounts) {
     }
 }
 
+
 function addNewAccount() {
-    const accountName = $('#accountName').val().trim();
-    const accountType = $('#accountType').val();
+    const accountName = sanitizeInput($('#accountName').val().trim()); // Nettoyage ajouté
+    const accountType = sanitizeInput($('#accountType').val()); // Nettoyage ajouté
 
     $('#successMessage').hide();
     $('#errorMessage').hide();
@@ -96,11 +102,12 @@ function addNewAccount() {
 }
 
 function deleteAccount(accountId) {
+    const sanitizedAccountId = sanitizeInput(accountId); // Nettoyage ajouté
     const confirmation = confirm("Êtes-vous sûr de vouloir supprimer ce compte ? Cette action est irréversible.");
     if (!confirmation) return;
 
     $.ajax({
-        url: `http://localhost:8000/accounts/${accountId}`,
+        url: `http://localhost:8000/accounts/${sanitizedAccountId}`, // Nettoyage ajouté
         type: 'DELETE',
         success: function () {
             showSuccessMessage("Compte supprimé avec succès !");
@@ -114,52 +121,58 @@ function deleteAccount(accountId) {
 }
 
 function showErrorMessage(message) {
-    $('#errorMessage').text(message).fadeIn();
+    const sanitizedMessage = sanitizeInput(message); // Nettoyage ajouté
+    $('#errorMessage').text(sanitizedMessage).fadeIn();
     setTimeout(function () {
         $('#errorMessage').fadeOut();
     }, 5000);
 }
 
+
 function showSuccessMessage(message) {
-    $('#successMessage').text(message).fadeIn();
+    const sanitizedMessage = sanitizeInput(message); // Nettoyage ajouté
+    $('#successMessage').text(sanitizedMessage).fadeIn();
     setTimeout(function () {
         $('#successMessage').fadeOut();
     }, 5000);
 }
 
+
 function depositToAccount(accountId) {
+    const sanitizedAccountId = sanitizeInput(accountId); // Nettoyage ajouté
     const depositAmount = prompt("Entrez le montant à déposer :");
+
     if (!depositAmount || isNaN(depositAmount) || depositAmount <= 0) {
         alert("Montant de dépôt non valide. Veuillez entrer un nombre positif.");
         return;
     }
 
     $.ajax({
-        url: `http://localhost:8000/accounts/${accountId}`,
+        url: `http://localhost:8000/accounts/${sanitizedAccountId}`, // Nettoyage ajouté
         type: 'GET',
         success: function (account) {
             const newBalance = account.balance + parseFloat(depositAmount);
 
             $.ajax({
-                url: `http://localhost:8000/accounts/${accountId}`,  // Pass balance as query parameter
+                url: `http://localhost:8000/accounts/${sanitizedAccountId}`,  // Nettoyage ajouté
                 type: 'PATCH',
-                contentType: 'application/json',  
-                data: JSON.stringify({balance: newBalance}),
+                contentType: 'application/json',
+                data: JSON.stringify({ balance: newBalance }),
                 success: function () {
                     const transaction = {
                         id: generateTransactionId(),
                         fromUserId: account.userId,
                         toUserId: account.userId,
-                        fromAccountId: accountId,
-                        toAccountId: accountId,
+                        fromAccountId: sanitizedAccountId,  // Nettoyage ajouté
+                        toAccountId: sanitizedAccountId,  // Nettoyage ajouté
                         amount: parseFloat(depositAmount),
                         date: new Date().toISOString(),
                         transferType: "deposit",
-                        description: `Dépôt de ${parseFloat(depositAmount).toFixed(2)} € sur ${account.name}`,
+                        description: `Dépôt de ${parseFloat(depositAmount).toFixed(2)} € sur ${sanitizeInput(account.name)}`, // Nettoyage ajouté
                         senderBalanceAfter: newBalance,
                         recipientBalanceAfter: newBalance
                     };
-            
+
                     recordTransaction(transaction, function () {
                         showSuccessMessage("Dépôt effectué avec succès !");
                         loadExistingAccounts();  // Reload accounts or refresh UI as necessary
@@ -170,7 +183,7 @@ function depositToAccount(accountId) {
                     showErrorMessage("Erreur lors du dépôt. Veuillez réessayer.");
                 }
             });
-            
+
         },
         error: function (error) {
             console.error("Erreur lors de la récupération du solde actuel :", error);
@@ -179,7 +192,9 @@ function depositToAccount(accountId) {
     });
 }
 
+
 function withdrawFromAccount(accountId) {
+    const sanitizedAccountId = sanitizeInput(accountId); // Nettoyage ajouté
     const withdrawAmount = prompt("Entrez le montant à retirer :");
     if (!withdrawAmount || isNaN(withdrawAmount) || withdrawAmount <= 0) {
         alert("Montant de retrait non valide. Veuillez entrer un nombre positif.");
@@ -187,7 +202,7 @@ function withdrawFromAccount(accountId) {
     }
 
     $.ajax({
-        url: `http://localhost:8000/accounts/${accountId}`,
+        url: `http://localhost:8000/accounts/${sanitizedAccountId}`, // Nettoyage ajouté
         type: 'GET',
         success: function (account) {
             const currentBalance = account.balance;
@@ -201,7 +216,7 @@ function withdrawFromAccount(accountId) {
             const newBalance = currentBalance - amountToWithdraw;
 
             $.ajax({
-                url: `http://localhost:8000/accounts/${accountId}`,
+                url: `http://localhost:8000/accounts/${sanitizedAccountId}`, // Nettoyage ajouté
                 type: 'PATCH',
                 contentType: 'application/json',
                 data: JSON.stringify({ balance: newBalance }),
@@ -210,12 +225,12 @@ function withdrawFromAccount(accountId) {
                         id: generateTransactionId(),
                         fromUserId: account.userId,
                         toUserId: account.userId,
-                        fromAccountId: accountId,
-                        toAccountId: accountId,
+                        fromAccountId: sanitizedAccountId,  // Nettoyage ajouté
+                        toAccountId: sanitizedAccountId,  // Nettoyage ajouté
                         amount: amountToWithdraw,
                         date: new Date().toISOString(),
                         transferType: "withdrawal",
-                        description: `Retrait de ${amountToWithdraw.toFixed(2)} € de ${account.name}`,
+                        description: `Retrait de ${amountToWithdraw.toFixed(2)} € de ${sanitizeInput(account.name)}`, // Nettoyage ajouté
                         senderBalanceAfter: newBalance,
                         recipientBalanceAfter: newBalance
                     };
@@ -239,11 +254,16 @@ function withdrawFromAccount(accountId) {
 }
 
 function recordTransaction(transaction, callback) {
+    const sanitizedTransaction = {
+        ...transaction,
+        description: sanitizeInput(transaction.description) // Nettoyage ajouté
+    };
+
     $.ajax({
         url: 'http://localhost:8000/transactions',
         type: 'POST',
         contentType: 'application/json',
-        data: JSON.stringify(transaction),
+        data: JSON.stringify(sanitizedTransaction), // Utilisation de la transaction nettoyée
         success: function () {
             console.log("Transaction enregistrée avec succès.");
             if (typeof callback === 'function') {

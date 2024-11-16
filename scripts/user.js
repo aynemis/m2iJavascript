@@ -5,7 +5,6 @@ $( document ).ready( function (){
         alert("Utilisateur non connecté.");
         window.location.href = '../views/signin.html';
     }
-    
     loadUserInfo();
 
     $( '.container' ).css( 'display', 'block' );
@@ -19,16 +18,15 @@ $( document ).ready( function (){
         deleteUserAccount();
     });
 });
-
-
+const sanitizeInput = (input) => DOMPurify.sanitize(input);
 function loadUserInfo() {
-    const username = localStorage.getItem('username');
+    const username = sanitizeInput(localStorage.getItem('username'));  // Sanitisation applied
 
     $.ajax({
         url: 'http://localhost:8000/users',
         type: 'GET',
         success: function (users) {
-            const user = users.find(u => u.name === username);
+            const user = users.find(u => sanitizeInput(u.name) === username);  // Sanitisation applied on user.name
             if (user) {
                 populateProfileForm(user);
             } else {
@@ -42,18 +40,15 @@ function loadUserInfo() {
     });
 }
 
-
 function populateProfileForm(user) {
-    $('#userName').val(user.name);
-    $('#userEmail').val(user.email);
+    $('#userName').val(sanitizeInput(user.name));  // Sanitisation applied
+    $('#userEmail').val(sanitizeInput(user.email));  // Sanitisation applied
     $('#alertThreshold').val(user.alertThreshold || '');
 }
-
-
 function updateUserProfile() {
-    const userId = localStorage.getItem('userId');  
-    const updatedName = $('#userName').val().trim(); 
-    const updatedEmail = $('#userEmail').val().trim(); 
+    const userId = sanitizeInput(localStorage.getItem('userId'));  
+    const updatedName = sanitizeInput($('#userName').val().trim());  // Sanitisation applied
+    const updatedEmail = sanitizeInput($('#userEmail').val().trim());  // Sanitisation applied
     const alertThresholdStr = $('#alertThreshold').val().trim(); // Get alert threshold as string
 
     // Convert alert threshold to null if it's empty, otherwise parse it as a number
@@ -82,7 +77,6 @@ function updateUserProfile() {
                 alertThreshold: alertThreshold 
             };
 
-            
             $.ajax({
                 url: `http://localhost:8000/users/${user.id}`,  
                 type: 'PUT',
@@ -107,9 +101,8 @@ function updateUserProfile() {
     });
 }
 
-
 function deleteUserAccount() {
-    const userId = localStorage.getItem('userId');  
+    const userId = sanitizeInput(localStorage.getItem('userId'));  // Sanitise userId
 
     const confirmation = confirm("Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.");
 
@@ -133,8 +126,6 @@ function deleteUserAccount() {
         }
     });
 }
-
-
 
 function showErrorMessage(message) {
     $('#errorMessage').text(message).fadeIn();

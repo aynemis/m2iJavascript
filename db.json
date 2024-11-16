@@ -85,6 +85,34 @@
             "email": "test@gmail.com",
             "password": "$2b$12$ALF63NasA8qC0lXHMs1iN.nZqe6GguN5gGRNcuyADHb61oa24VPWO",
             "alertThreshold": null
+        },
+        {
+            "id": "eb2d2d42-7a33-4453-8380-a9d524c93d15",
+            "name": "edouard",
+            "email": "edouard@gmail.com",
+            "password": "$2b$12$i7zOgwQSHhx.BE68FwRDYu2VjNuYtV75H1TLE5p7UdScX5G8pc3GW",
+            "alertThreshold": null
+        },
+        {
+            "id": "7e1d45e9-c598-4602-99bb-3eab32bc9f75",
+            "name": "ed",
+            "email": "ed@gmail.com",
+            "password": "$2b$12$.bJq2TnUYtEaecreF1tWBeg7ueUEGQJMH5xpCYKpADSo3hwikxGxC",
+            "alertThreshold": 20
+        },
+        {
+            "id": "ba1a6080-2bf5-4f5c-ad98-5daa5d5ad2de",
+            "name": "edouard",
+            "email": "chop@gmail.com",
+            "password": "$2b$12$3hGR.1An.SPCN9CBzaiOru.3fPJvT1Bjg.6yHYAsxXqlY6Km.Hpye",
+            "alertThreshold": null
+        },
+        {
+            "id": "885a94ca-5bca-41b5-85b4-59c5cc83fd05",
+            "name": "edazezer",
+            "email": "azerted@gmail.com",
+            "password": "$2b$12$Ph6ex7nc6BRoS7zk8eM5EeAG7lLhyTxJ//BLcWYvlBa/DpFOky59a",
+            "alertThreshold": 1000000000000
         }
     ],
     "accounts": [
@@ -100,7 +128,7 @@
             "userId": "2",
             "name": "Compte Courant de Bob",
             "type": "Courant",
-            "balance": 28931.5
+            "balance": 36431.5
         },
         {
             "id": "a3",
@@ -178,6 +206,62 @@
             "name": "Compte Courant F",
             "type": "Épargne",
             "balance": 99900.0
+        },
+        {
+            "id": "fad68336-dc03-4fc4-a03d-236173b82ca5",
+            "userId": "7e1d45e9-c598-4602-99bb-3eab32bc9f75",
+            "name": "compte A",
+            "type": "Épargne",
+            "balance": 1000.0
+        },
+        {
+            "id": "fa5ed6a0-a0eb-488a-8c6f-e1ef3ed090a5",
+            "userId": "7e1d45e9-c598-4602-99bb-3eab32bc9f75",
+            "name": "TEST",
+            "type": "Courant",
+            "balance": 1500.0
+        },
+        {
+            "id": "19dc0368-b058-475f-97f4-9b1da1abf507",
+            "userId": "ba1a6080-2bf5-4f5c-ad98-5daa5d5ad2de",
+            "name": "compte A",
+            "type": "Courant",
+            "balance": 2755.0
+        },
+        {
+            "id": "7b3549b9-c1b4-4243-9429-79c70c863296",
+            "userId": "ba1a6080-2bf5-4f5c-ad98-5daa5d5ad2de",
+            "name": "k",
+            "type": "Épargne",
+            "balance": 245.0
+        },
+        {
+            "id": "7d15967b-f164-4d47-a10d-6b208a5f069f",
+            "userId": "885a94ca-5bca-41b5-85b4-59c5cc83fd05",
+            "name": "A",
+            "type": "Épargne",
+            "balance": 1000.0
+        },
+        {
+            "id": "fe55c29f-7c3e-4bfe-aa41-d8d453d1568d",
+            "userId": "885a94ca-5bca-41b5-85b4-59c5cc83fd05",
+            "name": "C",
+            "type": "Courant",
+            "balance": 5000.0
+        },
+        {
+            "id": "48965736-18e7-4201-9e76-663bc81c9ae3",
+            "userId": "7c62b510-b481-44db-84d4-41257d4a4d0a",
+            "name": "A",
+            "type": "Épargne",
+            "balance": 2000.0
+        },
+        {
+            "id": "2d3e9323-0147-4c87-ab32-c6a25ba5accf",
+            "userId": "7c62b510-b481-44db-84d4-41257d4a4d0a",
+            "name": "B",
+            "type": "Courant",
+            "balance": 0.0
         }
     ],
     "transactions": [
@@ -830,6 +914,266 @@
             "description": "Transfert de 100.00 € de Compte Courant F à Compte C T2",
             "senderBalanceAfter": 99900.0,
             "recipientBalanceAfter": 2100.0
+        },
+        {
+            "id": "4d24871e-0647-43cb-af8c-8cf2bb05224b",
+            "fromUserId": "7e1d45e9-c598-4602-99bb-3eab32bc9f75",
+            "toUserId": "7e1d45e9-c598-4602-99bb-3eab32bc9f75",
+            "fromAccountId": "fad68336-dc03-4fc4-a03d-236173b82ca5",
+            "toAccountId": "fad68336-dc03-4fc4-a03d-236173b82ca5",
+            "amount": 1000.0,
+            "date": "2024-11-16T11:38:32.333Z",
+            "transferType": "deposit",
+            "description": "Dépôt de 1000.00 € sur compte A",
+            "senderBalanceAfter": 1000.0,
+            "recipientBalanceAfter": 1000.0
+        },
+        {
+            "id": "9b0c0d0b-7cba-454d-b09b-a665a4eb4781",
+            "fromUserId": "7e1d45e9-c598-4602-99bb-3eab32bc9f75",
+            "toUserId": "7e1d45e9-c598-4602-99bb-3eab32bc9f75",
+            "fromAccountId": "fa5ed6a0-a0eb-488a-8c6f-e1ef3ed090a5",
+            "toAccountId": "fa5ed6a0-a0eb-488a-8c6f-e1ef3ed090a5",
+            "amount": 3000.0,
+            "date": "2024-11-16T11:38:36.034Z",
+            "transferType": "deposit",
+            "description": "Dépôt de 3000.00 € sur TEST",
+            "senderBalanceAfter": 3000.0,
+            "recipientBalanceAfter": 3000.0
+        },
+        {
+            "id": "d58db965-f514-468b-a853-2afce98ff1fb",
+            "fromUserId": "7e1d45e9-c598-4602-99bb-3eab32bc9f75",
+            "toUserId": "7e1d45e9-c598-4602-99bb-3eab32bc9f75",
+            "fromAccountId": "fa5ed6a0-a0eb-488a-8c6f-e1ef3ed090a5",
+            "toAccountId": "fa5ed6a0-a0eb-488a-8c6f-e1ef3ed090a5",
+            "amount": 1000.0,
+            "date": "2024-11-16T11:38:43.225Z",
+            "transferType": "withdrawal",
+            "description": "Retrait de 1000.00 € de TEST",
+            "senderBalanceAfter": 2000.0,
+            "recipientBalanceAfter": 2000.0
+        },
+        {
+            "id": "8c8b2136-9170-47f6-86fa-aff09da8275c",
+            "fromUserId": "7e1d45e9-c598-4602-99bb-3eab32bc9f75",
+            "toUserId": "7e1d45e9-c598-4602-99bb-3eab32bc9f75",
+            "fromAccountId": "fa5ed6a0-a0eb-488a-8c6f-e1ef3ed090a5",
+            "toAccountId": "fad68336-dc03-4fc4-a03d-236173b82ca5",
+            "amount": 500.0,
+            "date": "2024-11-16T11:38:56.306Z",
+            "transferType": "internal",
+            "description": "Transfert de 500.00 € entre vos comptes: TEST vers compte A",
+            "senderBalanceAfter": 1500.0,
+            "recipientBalanceAfter": 1500.0
+        },
+        {
+            "id": "114c6a5e-2bc2-42e8-8bfd-b3044bd17f82",
+            "fromUserId": "7e1d45e9-c598-4602-99bb-3eab32bc9f75",
+            "toUserId": "2",
+            "fromAccountId": "fad68336-dc03-4fc4-a03d-236173b82ca5",
+            "toAccountId": "a2",
+            "amount": 500.0,
+            "date": "2024-11-16T11:39:33.397Z",
+            "transferType": "external",
+            "description": "Transfert de 500.00 € de compte A à Compte Courant de Bob",
+            "senderBalanceAfter": 1000.0,
+            "recipientBalanceAfter": 29431.5
+        },
+        {
+            "id": "d2308dd7-1ad9-47d0-b88d-41ecbaa3e6a9",
+            "fromUserId": "ba1a6080-2bf5-4f5c-ad98-5daa5d5ad2de",
+            "toUserId": "ba1a6080-2bf5-4f5c-ad98-5daa5d5ad2de",
+            "fromAccountId": "19dc0368-b058-475f-97f4-9b1da1abf507",
+            "toAccountId": "19dc0368-b058-475f-97f4-9b1da1abf507",
+            "amount": 1000.0,
+            "date": "2024-11-16T13:05:01.681Z",
+            "transferType": "deposit",
+            "description": "Dépôt de 1000.00 € sur compte A",
+            "senderBalanceAfter": 1000.0,
+            "recipientBalanceAfter": 1000.0
+        },
+        {
+            "id": "ce81cc9a-6a0b-4d9f-a72e-351e520e851f",
+            "fromUserId": "ba1a6080-2bf5-4f5c-ad98-5daa5d5ad2de",
+            "toUserId": "ba1a6080-2bf5-4f5c-ad98-5daa5d5ad2de",
+            "fromAccountId": "7b3549b9-c1b4-4243-9429-79c70c863296",
+            "toAccountId": "7b3549b9-c1b4-4243-9429-79c70c863296",
+            "amount": 2000.0,
+            "date": "2024-11-16T13:05:06.081Z",
+            "transferType": "deposit",
+            "description": "Dépôt de 2000.00 € sur k",
+            "senderBalanceAfter": 2000.0,
+            "recipientBalanceAfter": 2000.0
+        },
+        {
+            "id": "5a445575-c6c8-42d8-9009-47e0cda87a0f",
+            "fromUserId": "ba1a6080-2bf5-4f5c-ad98-5daa5d5ad2de",
+            "toUserId": "ba1a6080-2bf5-4f5c-ad98-5daa5d5ad2de",
+            "fromAccountId": "19dc0368-b058-475f-97f4-9b1da1abf507",
+            "toAccountId": "7b3549b9-c1b4-4243-9429-79c70c863296",
+            "amount": 122.0,
+            "date": "2024-11-16T13:05:15.186Z",
+            "transferType": "internal",
+            "description": "Transfert de 122.00 € entre vos comptes: compte A vers k",
+            "senderBalanceAfter": 878.0,
+            "recipientBalanceAfter": 2122.0
+        },
+        {
+            "id": "0a256635-7e6a-46b9-8f8d-9f0d99b1fbc8",
+            "fromUserId": "ba1a6080-2bf5-4f5c-ad98-5daa5d5ad2de",
+            "toUserId": "ba1a6080-2bf5-4f5c-ad98-5daa5d5ad2de",
+            "fromAccountId": "19dc0368-b058-475f-97f4-9b1da1abf507",
+            "toAccountId": "7b3549b9-c1b4-4243-9429-79c70c863296",
+            "amount": 123.0,
+            "date": "2024-11-16T13:06:04.856Z",
+            "transferType": "internal",
+            "description": "Transfert de 123.00 € entre vos comptes: compte A vers k",
+            "senderBalanceAfter": 755.0,
+            "recipientBalanceAfter": 2245.0
+        },
+        {
+            "id": "e1ec57ff-7384-4193-9b3d-b565a07dcb2b",
+            "fromUserId": "ba1a6080-2bf5-4f5c-ad98-5daa5d5ad2de",
+            "toUserId": "ba1a6080-2bf5-4f5c-ad98-5daa5d5ad2de",
+            "fromAccountId": "7b3549b9-c1b4-4243-9429-79c70c863296",
+            "toAccountId": "19dc0368-b058-475f-97f4-9b1da1abf507",
+            "amount": 2000.0,
+            "date": "2024-11-16T13:06:15.649Z",
+            "transferType": "internal",
+            "description": "Transfert de 2000.00 € entre vos comptes: k vers compte A",
+            "senderBalanceAfter": 245.0,
+            "recipientBalanceAfter": 2755.0
+        },
+        {
+            "id": "8462a228-5a89-4650-a29e-60498ee1133f",
+            "fromUserId": "885a94ca-5bca-41b5-85b4-59c5cc83fd05",
+            "toUserId": "885a94ca-5bca-41b5-85b4-59c5cc83fd05",
+            "fromAccountId": "7d15967b-f164-4d47-a10d-6b208a5f069f",
+            "toAccountId": "7d15967b-f164-4d47-a10d-6b208a5f069f",
+            "amount": 3000.0,
+            "date": "2024-11-16T14:12:55.011Z",
+            "transferType": "deposit",
+            "description": "Dépôt de 3000.00 € sur A",
+            "senderBalanceAfter": 3000.0,
+            "recipientBalanceAfter": 3000.0
+        },
+        {
+            "id": "b150157e-a4d1-4361-897a-156a1c81b9d6",
+            "fromUserId": "885a94ca-5bca-41b5-85b4-59c5cc83fd05",
+            "toUserId": "885a94ca-5bca-41b5-85b4-59c5cc83fd05",
+            "fromAccountId": "7d15967b-f164-4d47-a10d-6b208a5f069f",
+            "toAccountId": "7d15967b-f164-4d47-a10d-6b208a5f069f",
+            "amount": 1000.0,
+            "date": "2024-11-16T14:13:01.787Z",
+            "transferType": "withdrawal",
+            "description": "Retrait de 1000.00 € de A",
+            "senderBalanceAfter": 2000.0,
+            "recipientBalanceAfter": 2000.0
+        },
+        {
+            "id": "097d06fd-ac53-4193-b5b4-ae1cbd9a9e31",
+            "fromUserId": "885a94ca-5bca-41b5-85b4-59c5cc83fd05",
+            "toUserId": "885a94ca-5bca-41b5-85b4-59c5cc83fd05",
+            "fromAccountId": "2fd0320f-f934-48b2-86bd-5a9ac315f2e7",
+            "toAccountId": "2fd0320f-f934-48b2-86bd-5a9ac315f2e7",
+            "amount": 1000.0,
+            "date": "2024-11-16T14:13:11.685Z",
+            "transferType": "deposit",
+            "description": "Dépôt de 1000.00 € sur B",
+            "senderBalanceAfter": 1000.0,
+            "recipientBalanceAfter": 1000.0
+        },
+        {
+            "id": "5ff30ff5-dfd1-43a3-9d17-36bd5649251b",
+            "fromUserId": "885a94ca-5bca-41b5-85b4-59c5cc83fd05",
+            "toUserId": "885a94ca-5bca-41b5-85b4-59c5cc83fd05",
+            "fromAccountId": "fe55c29f-7c3e-4bfe-aa41-d8d453d1568d",
+            "toAccountId": "fe55c29f-7c3e-4bfe-aa41-d8d453d1568d",
+            "amount": 4000.0,
+            "date": "2024-11-16T14:13:23.337Z",
+            "transferType": "deposit",
+            "description": "Dépôt de 4000.00 € sur C",
+            "senderBalanceAfter": 4000.0,
+            "recipientBalanceAfter": 4000.0
+        },
+        {
+            "id": "63396c73-d6dc-489f-ae67-a997087339b5",
+            "fromUserId": "885a94ca-5bca-41b5-85b4-59c5cc83fd05",
+            "toUserId": "885a94ca-5bca-41b5-85b4-59c5cc83fd05",
+            "fromAccountId": "7d15967b-f164-4d47-a10d-6b208a5f069f",
+            "toAccountId": "fe55c29f-7c3e-4bfe-aa41-d8d453d1568d",
+            "amount": 1000.0,
+            "date": "2024-11-16T14:13:33.051Z",
+            "transferType": "internal",
+            "description": "Transfert de 1000.00 € entre vos comptes: A vers C",
+            "senderBalanceAfter": 1000.0,
+            "recipientBalanceAfter": 5000.0
+        },
+        {
+            "id": "c7411efa-736a-4f12-b8dd-a0107efc2dd0",
+            "fromUserId": "7c62b510-b481-44db-84d4-41257d4a4d0a",
+            "toUserId": "7c62b510-b481-44db-84d4-41257d4a4d0a",
+            "fromAccountId": "48965736-18e7-4201-9e76-663bc81c9ae3",
+            "toAccountId": "48965736-18e7-4201-9e76-663bc81c9ae3",
+            "amount": 5000.0,
+            "date": "2024-11-16T14:36:48.307Z",
+            "transferType": "deposit",
+            "description": "Dépôt de 5000.00 € sur A",
+            "senderBalanceAfter": 5000.0,
+            "recipientBalanceAfter": 5000.0
+        },
+        {
+            "id": "e12a0f05-e444-4d13-b4e6-5b0257902186",
+            "fromUserId": "7c62b510-b481-44db-84d4-41257d4a4d0a",
+            "toUserId": "7c62b510-b481-44db-84d4-41257d4a4d0a",
+            "fromAccountId": "2d3e9323-0147-4c87-ab32-c6a25ba5accf",
+            "toAccountId": "2d3e9323-0147-4c87-ab32-c6a25ba5accf",
+            "amount": 4000.0,
+            "date": "2024-11-16T14:36:59.671Z",
+            "transferType": "deposit",
+            "description": "Dépôt de 4000.00 € sur B",
+            "senderBalanceAfter": 4000.0,
+            "recipientBalanceAfter": 4000.0
+        },
+        {
+            "id": "bf7be8a9-3a95-466e-b740-e7d7baa307ff",
+            "fromUserId": "7c62b510-b481-44db-84d4-41257d4a4d0a",
+            "toUserId": "7c62b510-b481-44db-84d4-41257d4a4d0a",
+            "fromAccountId": "48965736-18e7-4201-9e76-663bc81c9ae3",
+            "toAccountId": "2d3e9323-0147-4c87-ab32-c6a25ba5accf",
+            "amount": 1000.0,
+            "date": "2024-11-16T14:37:08.227Z",
+            "transferType": "internal",
+            "description": "Transfert de 1000.00 € entre vos comptes: A vers B",
+            "senderBalanceAfter": 4000.0,
+            "recipientBalanceAfter": 5000.0
+        },
+        {
+            "id": "dbd3ec58-3cbe-4b26-8a23-12d8ba531d73",
+            "fromUserId": "7c62b510-b481-44db-84d4-41257d4a4d0a",
+            "toUserId": "2",
+            "fromAccountId": "48965736-18e7-4201-9e76-663bc81c9ae3",
+            "toAccountId": "a2",
+            "amount": 2000.0,
+            "date": "2024-11-16T14:37:28.155Z",
+            "transferType": "external",
+            "description": "Transfert de 2000.00 € de A à Compte Courant de Bob",
+            "senderBalanceAfter": 2000.0,
+            "recipientBalanceAfter": 31431.5
+        },
+        {
+            "id": "ddc8c6d0-c3c2-4b53-9880-724571048aba",
+            "fromUserId": "7c62b510-b481-44db-84d4-41257d4a4d0a",
+            "toUserId": "2",
+            "fromAccountId": "2d3e9323-0147-4c87-ab32-c6a25ba5accf",
+            "toAccountId": "a2",
+            "amount": 5000.0,
+            "date": "2024-11-16T14:38:32.465Z",
+            "transferType": "external",
+            "description": "Transfert de 5000.00 € de B à Compte Courant de Bob",
+            "senderBalanceAfter": 0.0,
+            "recipientBalanceAfter": 36431.5
         }
     ],
     "loginHistory": [
@@ -1287,6 +1631,41 @@
             "date": "2024-11-15T22:58:52.886Z",
             "ipAddress": "82.125.139.248",
             "location": "Franconville, France"
+        },
+        {
+            "id": "b82a6088-b0c5-470e-8b9f-9340c2791bfa",
+            "userId": "7e1d45e9-c598-4602-99bb-3eab32bc9f75",
+            "date": "2024-11-16T11:38:00.013Z",
+            "ipAddress": "82.125.148.17",
+            "location": "Pontoise, France"
+        },
+        {
+            "id": "b64344f7-fea1-450c-956a-07fad6db8616",
+            "userId": "ba1a6080-2bf5-4f5c-ad98-5daa5d5ad2de",
+            "date": "2024-11-16T13:04:29.835Z",
+            "ipAddress": "82.125.148.17",
+            "location": "Pontoise, France"
+        },
+        {
+            "id": "1c9e7242-b326-4cf3-98e3-d746898bb2ea",
+            "userId": "ba1a6080-2bf5-4f5c-ad98-5daa5d5ad2de",
+            "date": "2024-11-16T13:34:01.626Z",
+            "ipAddress": "82.125.148.17",
+            "location": "Pontoise, France"
+        },
+        {
+            "id": "f8b4ec9d-1865-4de5-afdf-85c6671f88ff",
+            "userId": "ba1a6080-2bf5-4f5c-ad98-5daa5d5ad2de",
+            "date": "2024-11-16T13:47:28.703Z",
+            "ipAddress": "82.125.148.17",
+            "location": "Pontoise, France"
+        },
+        {
+            "id": "e45d4156-03cf-453f-ae21-f743819f6e52",
+            "userId": "885a94ca-5bca-41b5-85b4-59c5cc83fd05",
+            "date": "2024-11-16T14:12:43.646Z",
+            "ipAddress": "82.125.148.17",
+            "location": "Pontoise, France"
         }
     ]
 }

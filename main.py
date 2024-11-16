@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Query,Request
 from fastapi.middleware.cors import CORSMiddleware
 from typing import List, Optional
 import json
@@ -7,9 +7,14 @@ from uuid import uuid4
 import re
 import bcrypt
 import httpx
-
+from slowapi import Limiter
+from slowapi.util import get_remote_address
+from fastapi.middleware.cors import CORSMiddleware
 # Initialize FastAPI app
 app = FastAPI()
+
+limiter = Limiter(key_func=get_remote_address)  # Uses IP address for rate limiting
+app.state.limiter = limiter
 
 origins = [
     "http://127.0.0.1:5500",  # Allow the frontend served from localhost:5500
@@ -52,17 +57,18 @@ def get_users_by_email(email: Optional[str] = None):
     return db["users"]
 
 @app.post("/login")
-def login(request: LoginRequest):
+@limiter.limit("5/minute")  # Limit to 5 requests per minute from the same IP
+async def login(request: Request, request_data: LoginRequest):  # Accept 'request' here
     # Find user by email
-    stored_user = next((u for u in db["users"] if u["email"] == request.email), None)
+    stored_user = next((u for u in db["users"] if u["email"] == request_data.email), None)
     if not stored_user:
         raise HTTPException(status_code=404, detail="User not found")
 
     # Compare password with stored hash
-    if not bcrypt.checkpw(request.password.encode('utf-8'), stored_user["password"].encode('utf-8')):
+    if not bcrypt.checkpw(request_data.password.encode('utf-8'), stored_user["password"].encode('utf-8')):
         raise HTTPException(status_code=400, detail="Invalid password")
 
-    # Return success and any needed user details (you can adjust what you want to return)
+    # Return success and any needed user details
     return {"message": "Login successful", "userId": stored_user["id"], "name": stored_user["name"]}
 
 @app.get("/users/{user_id}", response_model=User)

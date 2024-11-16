@@ -9,17 +9,21 @@ $(document).ready(function () {
 
 const userId = localStorage.getItem('userId');
 
+// Fonction pour nettoyer les entrées utilisateur et éviter les attaques XSS 
+const sanitizeInput = (input) => DOMPurify.sanitize(input);
+
 function loadUserInfo() {
     $.ajax({
-        url: `http://localhost:8000/users/${(userId)}`,
+        url: `http://localhost:8000/users/${sanitizeInput(userId)}`, // Nettoyage ajouté
         type: 'GET',
         success: function (user) {
             if (!user) {
                 window.location.href = '../templates/views/signin.html';
                 return;
             }
-            console.log(user)
-            $('#welcomeMessage').text(`Bienvenue ${user.name}`);
+            console.log(user);
+            const sanitizedName = sanitizeInput(user.name); // Nettoyage ajouté
+            $('#welcomeMessage').text(`Bienvenue ${sanitizedName}`);
             fetchAccountsForUser(user.id, user.alertThreshold);
         },
         error: function (error) {
@@ -32,12 +36,16 @@ function loadUserInfo() {
 
 function fetchAccountsForUser(userId, alertThreshold) {
     $.ajax({
-        url: `http://localhost:8000/accounts?userId=${userId}`,
+        url: `http://localhost:8000/accounts?userId=${sanitizeInput(userId)}`, // Nettoyage ajouté
         type: 'GET',
         success: function (accounts) {
-            const courantAccounts = accounts.filter(account => account.type === 'Courant');
-            displayAccounts(accounts, alertThreshold);
-            
+            const sanitizedAccounts = accounts.map(account => ({
+                ...account,
+                name: sanitizeInput(account.name), // Nettoyage ajouté
+            }));
+            const courantAccounts = sanitizedAccounts.filter(account => account.type === 'Courant');
+            displayAccounts(sanitizedAccounts, alertThreshold);
+
             if (courantAccounts.length > 0) {
                 fetchUserTransactions(userId, courantAccounts);
             }
@@ -64,7 +72,7 @@ function displayAccounts(accounts, alertThreshold) {
             const balanceClass = isLowBalance ? 'low-balance' : '';
 
             const row = `<tr>
-                <td>${account.name}</td>
+                <td>${account.name}</td> <!-- Les noms des comptes sont déjà nettoyés -->
                 <td class="${balanceClass}">${account.balance.toFixed(2)} €</td>
             </tr>`;
             accountsTableBody.append(row);
@@ -83,7 +91,12 @@ function fetchUserTransactions(userId, courantAccounts) {
         type: 'GET',
         success: function (transactions) {
             const accountIds = courantAccounts.map(account => account.id);
-            const userTransactions = transactions.filter(transaction =>
+            const sanitizedTransactions = transactions.map(transaction => ({
+                ...transaction,
+                senderBalanceAfter: sanitizeInput(transaction.senderBalanceAfter.toString()), // Nettoyage ajouté
+                recipientBalanceAfter: sanitizeInput(transaction.recipientBalanceAfter.toString()), // Nettoyage ajouté
+            }));
+            const userTransactions = sanitizedTransactions.filter(transaction =>
                 (transaction.fromUserId === userId && accountIds.includes(transaction.fromAccountId)) ||
                 (transaction.toUserId === userId && accountIds.includes(transaction.toAccountId))
             );
@@ -121,8 +134,8 @@ function displayBalanceHistoryChart(transactions, userId, courantAccounts) {
             return;
         }
 
-        labels.push(date);
-        data.push(balance);
+        labels.push(sanitizeInput(date)); // Nettoyage ajouté
+        data.push(parseFloat(balance)); // Assurez-vous que les valeurs restent des nombres
     });
 
     if (window.myLineChart) {
@@ -162,5 +175,5 @@ function displayBalanceHistoryChart(transactions, userId, courantAccounts) {
                 }
             }
         }
-    })
+    });
 }

@@ -20,10 +20,11 @@ $(document).ready(function () {
     });
 });
 
-const userId = localStorage.getItem('userId');
+const sanitizeInput = (input) => DOMPurify.sanitize(input);
+const userId = sanitizeInput(localStorage.getItem('userId'));
 
 function loadUserInfo() {
-    const username = localStorage.getItem('username');
+    const username = sanitizeInput(localStorage.getItem('username'));
     if (username) {
         $('#welcomeMessage').text(`Vos comptes`);
         fetchAccountsForUser(userId);
@@ -38,6 +39,11 @@ function fetchAccountsForUser(userId) {
         url: `http://localhost:8000/accounts?userId=${userId}`,
         type: 'GET',
         success: function (accounts) {
+            accounts.forEach(account => {
+                account.name = sanitizeInput(account.name); // Assainir le nom
+                account.type = sanitizeInput(account.type); // Assainir le type (si nécessaire)
+            });
+            
             displayAccounts(accounts);
             populateAccountFilter(accounts);
             fetchTransactionsForUser(userId);
@@ -59,8 +65,11 @@ function displayAccounts(accounts) {
         accountsTableBody.append('<tr><td colspan="2" class="text-center">Aucun compte trouvé.</td></tr>');
     } else {
         accounts.forEach(account => {
+            // Assainir le nom du compte avant de l'afficher
+            const sanitizedAccountName = sanitizeInput(account.name);  
+
             const row = `<tr>
-                <td>${account.name}</td>
+                <td>${sanitizedAccountName}</td>
                 <td>${account.balance.toFixed(2)} €</td>
             </tr>`;
             accountsTableBody.append(row);
@@ -77,7 +86,10 @@ function populateAccountFilter(accounts) {
     filterAccount.append('<option value="">Sélectionner</option>');
 
     accounts.forEach(account => {
-        filterAccount.append(`<option value="${account.id}">${account.name}</option>`);
+        // Sanitize the account name before inserting it into the DOM
+        const sanitizedAccountName = sanitizeInput(account.name);  
+
+        filterAccount.append(`<option value="${account.id}">${sanitizedAccountName}</option>`);
     });
 }
 
@@ -89,6 +101,11 @@ function fetchTransactionsForUser(userId) {
             const userTransactions = transactions.filter(transaction =>
                 transaction.fromUserId === userId || transaction.toUserId === userId
             );
+            
+            userTransactions.forEach(transaction => {
+                transaction.description = sanitizeInput(transaction.description);  // Sanitize description
+            });
+
             displayTransactions(userTransactions, userId);
         },
         error: function (error) {
@@ -97,6 +114,7 @@ function fetchTransactionsForUser(userId) {
         }
     });
 }
+
 
 function displayTransactions(transactions, userId) {
     const transactionTableBody = $('#transactionTableBody');
@@ -118,21 +136,24 @@ function displayTransactions(transactions, userId) {
                 transactionType = "Transfert externe";
             }
 
-            const fromAccountName = getAccountName(transaction.fromAccountId);
-            const toAccountName = getAccountName(transaction.toAccountId);
+            // Sanitize inputs before inserting them into the DOM
+            const sanitizedDescription = sanitizeInput(transaction.description);
+            const sanitizedFromAccountName = sanitizeInput(getAccountName(transaction.fromAccountId));
+            const sanitizedToAccountName = sanitizeInput(getAccountName(transaction.toAccountId));
 
             const row = `<tr>
                 <td>${new Date(transaction.date).toLocaleDateString()}</td>
-                <td>${transaction.description}</td>
+                <td>${sanitizedDescription}</td>
                 <td>${transaction.amount.toFixed(2)} €</td>
                 <td>${transactionType}</td>
-                <td>${fromAccountName}</td>
-                <td>${toAccountName}</td>
+                <td>${sanitizedFromAccountName}</td>
+                <td>${sanitizedToAccountName}</td>
             </tr>`;
             transactionTableBody.append(row);
         });
     }
 }
+
 
 function getAccountName(accountId) {
     if (!accountId) return "N/A";
@@ -143,26 +164,33 @@ function getAccountName(accountId) {
 
 function getUserAccounts() {
     let accounts = [];
+    
+    // Utiliser une promesse pour mieux gérer l'asynchronicité
     $.ajax({
         url: `http://localhost:8000/accounts?userId=${userId}`,
         type: 'GET',
-        async: false,
         success: function (data) {
-            accounts = data;
+            // Sanitize the account data
+            accounts = data.map(account => ({
+                ...account,
+                name: sanitizeInput(account.name),  // Assainir le nom du compte
+                // Ajoutez d'autres champs à assainir si nécessaire
+            }));
         },
         error: function (error) {
             console.error("Erreur lors de la récupération des comptes :", error);
             alert("Erreur lors de la récupération des comptes. Veuillez réessayer.");
         }
     });
+    
     return accounts;
 }
 
 function applyFilters() {
-    const filterType = $('#filterType').val();
-    const filterDate = $('#filterDate').val();
-    const filterDateRange = $('#filterDateRange').val();
-    const filterAccount = $('#filterAccount').val();
+    const filterType = sanitizeInput($('#filterType').val());
+    const filterDate = sanitizeInput($('#filterDate').val());
+    const filterDateRange = sanitizeInput($('#filterDateRange').val());
+    const filterAccount = sanitizeInput($('#filterAccount').val());
 
     $.ajax({
         url: 'http://localhost:8000/transactions',
@@ -226,12 +254,20 @@ function applyFilters() {
     });
 }
 
+
 function showAllTransactions() {
     $.ajax({
         url: 'http://localhost:8000/transactions',
         type: 'GET',
         success: function (transactions) {
-            const userTransactions = transactions.filter(transaction =>
+            const sanitizedTransactions = transactions.map(transaction => ({
+                ...transaction,
+                description:transaction.description,
+                amount: transaction.amount,
+                date:transaction.date,
+            }));
+
+            const userTransactions = sanitizedTransactions.filter(transaction =>
                 transaction.fromUserId === userId || transaction.toUserId === userId
             );
             displayTransactions(userTransactions, userId);
@@ -242,6 +278,7 @@ function showAllTransactions() {
         }
     });
 }
+
 
 function convertTableToCSV() {
     const rows = [];

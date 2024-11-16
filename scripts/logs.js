@@ -3,15 +3,18 @@ $(document).ready(function () {
         alert("Utilisateur non connecté.");
         window.location.href = '../views/signin.html';
     }
-     $('.container').css('display', 'block');
+    $('.container').css('display', 'block');
     loadLoginHistory();
 });
 
+// Fonction pour nettoyer les données utilisateur et éviter les attaques XSS
+const sanitizeInput = (input) =>  DOMPurify.sanitize(input);// Échappe les caractères spéciaux
+
 function loadLoginHistory() {
-    const userId = localStorage.getItem('userId');
+    const userId = sanitizeInput(localStorage.getItem('userId')); // Nettoyage ajouté
 
     $.ajax({
-        url: `http://localhost:8000/loginHistory?userId=${userId}`,
+        url: `http://localhost:8000/loginHistory?userId=${userId}`, // Nettoyage ajouté
         type: 'GET',
         success: function (logins) {
             displayLoginHistory(logins);
@@ -32,14 +35,17 @@ function displayLoginHistory(logins) {
         loginHistoryTableBody.append('<tr><td colspan="3" class="text-center">Aucune connexion trouvée.</td></tr>');
     } else {
         logins.forEach(login => {
-            const date = new Date(login.date).toLocaleString();
+            const date = sanitizeInput(new Date(login.date).toLocaleString()); // Nettoyage ajouté
+            const ipAddress = sanitizeInput(login.ipAddress); // Nettoyage ajouté
+            const location = sanitizeInput(login.location); // Nettoyage ajouté
+
             const row = `<tr>
                 <td>${date}</td>
-                <td>${login.ipAddress}</td>
-                <td>${login.location}</td>
+                <td>${ipAddress}</td>
+                <td>${location}</td>
             </tr>`;
             loginHistoryTableBody.append(row);
-        })
+        });
     }
 }
 
@@ -48,13 +54,15 @@ function checkForSuspiciousLogins(logins) {
     const lastLogin = logins[logins.length - 1];
     const secondLastLogin = logins[logins.length - 2];
 
-    if (lastLogin.location === secondLastLogin.location) {
+    // Comparer les données déjà nettoyées dans `displayLoginHistory`
+    if (sanitizeInput(lastLogin.location) === sanitizeInput(secondLastLogin.location)) {
         $('#alertMessage').hide();
     }
 }
 
 function showErrorMessage(message) {
-    $('#errorMessage').text(message).fadeIn();
+    const sanitizedMessage = sanitizeInput(message); // Nettoyage ajouté
+    $('#errorMessage').text(sanitizedMessage).fadeIn();
     setTimeout(function () {
         $('#errorMessage').fadeOut();
     }, 5000);

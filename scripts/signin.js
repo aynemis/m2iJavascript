@@ -4,6 +4,9 @@ $(document).ready(function () {
     }
     $('.container').css('display', 'block');
 
+    // Sanitizing function
+    const sanitizeInput = (input) => DOMPurify.sanitize(input);
+
     function fetchIPAndLocation(callback) {
         $.ajax({
             url: 'http://localhost:8000/get-ip-location',  // Calling FastAPI endpoint
@@ -25,14 +28,15 @@ $(document).ready(function () {
                 callback(null, null);
             }
         });
-    }    
+    }
 
+    // Handle login form submission
     $('#loginForm').on('submit', function (event) {
         event.preventDefault();
-    
-        const email = $('#email').val();
-        const password = $('#password').val();
-    
+
+        const email = sanitizeInput($('#email').val()); // Sanitize email
+        const password = sanitizeInput($('#password').val()); // Sanitize password
+
         $.ajax({
             url: 'http://localhost:8000/login',
             type: 'POST',
@@ -52,16 +56,16 @@ $(document).ready(function () {
                                 location: location
                             }),
                             success: function () {
-                                console.log("Historique de connexion enregistré.");
+                                console.log("Login history recorded.");
                             },
                             error: function (error) {
-                                console.error("Erreur lors de l'enregistrement de l'historique :", error);
+                                console.error("Error recording login history:", error);
                             }
                         });
                     } else {
-                        alert("Impossible de récupérer l'adresse IP et la localisation.");
+                        alert("Unable to retrieve IP and location.");
                     }
-    
+
                     localStorage.setItem('isLoggedIn', 'true');
                     localStorage.setItem('username', response.name);
                     localStorage.setItem('userId', response.userId);
@@ -69,24 +73,23 @@ $(document).ready(function () {
                 });
             },
             error: function (xhr, status, error) {
-                const errorMessage = xhr.responseJSON ? xhr.responseJSON.detail : "Erreur lors de la connexion. Veuillez réessayer.";
-                console.error("Erreur lors de la vérification des informations :", errorMessage);
-                alert(errorMessage);  
+                const errorMessage = xhr.responseJSON ? xhr.responseJSON.detail : "Error during login. Please try again.";
+                console.error("Error during login verification:", errorMessage);
+                alert(errorMessage);
             }
         });
     });
-    
-    
 
+    // Handle registration form submission
     $('#registrationForm').on('submit', function (event) {
         event.preventDefault();
 
         $('#confirmationMessage').hide();
         $('.form-control').removeClass('is-invalid');
 
-        const name = $('#name').val();
-        const email = $('#email').val();
-        const password = $('#password').val();
+        const name = sanitizeInput($('#name').val()); // Sanitize name
+        const email = sanitizeInput($('#email').val()); // Sanitize email
+        const password = sanitizeInput($('#password').val()); // Sanitize password
 
         if (password.length < 8) {
             $('#password').addClass('is-invalid');
@@ -114,8 +117,8 @@ $(document).ready(function () {
                 window.location.href = '../../views/home.html';
             },
             error: function (error) {
-                console.error("Erreur lors de la création du compte :", error);
-                alert("Erreur lors de la création du compte. Veuillez réessayer.");
+                console.error("Error creating account:", error);
+                alert("Error during account creation. Please try again.");
             }
         });
     });

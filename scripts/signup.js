@@ -4,15 +4,19 @@ $(document).ready(function () {
     }
     $('.container').css('display', 'block');
 
+    // Fonction pour nettoyer les entrées utilisateur et éviter les attaques XSS
+const sanitizeInput = (input) => DOMPurify.sanitize(input);
+
     $('#registrationForm').on('submit', function (event) {
         event.preventDefault();
 
         $('#confirmationMessage').hide();
         $('.form-control').removeClass('is-invalid');
 
-        const name = $('#name').val();
-        const email = $('#email').val();
-        const password = $('#password').val();
+        // Sanitize les entrées utilisateur pour éviter les XSS
+        const name = sanitizeInput($('#name').val()); // Nettoyage ajouté
+        const email = sanitizeInput($('#email').val()); // Nettoyage ajouté
+        const password = $('#password').val(); // Pas de sanitization nécessaire pour les mots de passe
 
         if (password.length < 8) {
             $('#password').addClass('is-invalid');
@@ -38,9 +42,11 @@ $(document).ready(function () {
             error: function (xhr, status, error) {
                 console.error("Error during account creation:", error);
 
-                // Parse and display the error message from the response
-                const errorMessage = xhr.responseJSON ? xhr.responseJSON.detail : "An unknown error occurred.";
-                alert("Error: " + errorMessage);
+                // Parse et sanitize les messages d'erreur retournés par l'API
+                const errorMessage = xhr.responseJSON 
+                    ? sanitizeInput(xhr.responseJSON.detail)  // Nettoyage ajouté
+                    : "An unknown error occurred.";
+                alert("Error: " + errorMessage); // Message sécurisé
 
                 // Highlight the invalid field
                 if (xhr.responseJSON && xhr.responseJSON.detail) {
