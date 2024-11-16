@@ -40,7 +40,7 @@ On a utilisé DomPurify pour gérer les attaques XSS coté front
 Nous utilisons pour l'instant Fast API et une db.json, nous devrons donc apporter de nouvelles couches de sécurité lors du déploiement.  
 
 - **Protection contre les Attaques Courantes** :
-  - **Prévention des Attaques CSRF côté serveur**: une couche de protection sera ajoutée du côté serveur
+  - **Prévention des Attaques XSS côté serveur**: une couche de protection sera ajoutée du côté serveur
   - **Prévention des Attaques CSRF** (Cross-Site Request Forgery): Nous mettrons en place des token CSRF
   - **Protection contre les Injections SQL** : Toutes les entrées utilisateur seront traitées pour prévenir les tentatives d’injection SQL (à implémenter lors de la connexion avec une base de donnée).
 
