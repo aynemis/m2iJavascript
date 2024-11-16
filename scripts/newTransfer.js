@@ -288,3 +288,7 @@ function showSuccessMessage(message) {
     $('#successMessage').text(message).fadeIn();
     setTimeout(() => $('#successMessage').fadeOut(), 5000);
 }
+function showErrorMessage(message) {
+    $('#errorMessage').text(message).fadeIn();
+    setTimeout(() => $('#errorMessage').fadeOut(), 5000);
+}

@@ -29,15 +29,15 @@ Cette application bancaire est conçue pour offrir une gestion complète des com
   - et 1 caractère spécial.
   - chiffrer et hasher le mot de passe 
 
--**Attaque Brut Force**:
+- **Attaque Brut Force**:
 On a utilisé SlowApi et son mécanisme SlowDown pour empêcher les attaques Brut Force lors de la connexion 
 
--**Attaque XSS**:
+- **Attaque XSS**:
 On a utilisé DomPurify pour gérer les attaques XSS coté front
 
 ## Sécurité (à venir)
 
-De par l'utilisation de json-server, nous allons mettre en place de nouvelles couches de sécurité lors du déploiement
+Nous utilisons pour l'instant Fast API et une db.json, nous devrons donc apporter de nouvelles couches de sécurité lors du déploiement.  
 
 - **Protection contre les Attaques Courantes** :
   - **Prévention des Attaques CSRF côté serveur**: une couche de protection sera ajoutée du côté serveur
